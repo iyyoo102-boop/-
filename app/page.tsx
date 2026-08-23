@@ -101,7 +101,7 @@ export default function Home() {
         <Link href="/news" className="back-link">
           뉴스 검색 →
         </Link>
-        <h1>엘렌 게시판</h1>
+        <h1>테스트</h1>
         <p>문의사항을 자유롭게 남겨주세요. 작성자는 모두 익명으로 표시됩니다.</p>
       </header>
 

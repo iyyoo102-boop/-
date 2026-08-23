@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "엘렌 게시판",
+  title: "테스트",
   description: "문의사항을 남기는 게시판입니다.",
 };
 

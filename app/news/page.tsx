@@ -72,7 +72,7 @@ export default function NewsSearchPage() {
     <div className="page">
       <header className="header">
         <Link href="/" className="back-link">
-          ← 엘렌 게시판
+          ← 테스트
         </Link>
         <h1>뉴스 검색</h1>
         <p>키워드로 최신 뉴스를 검색해보세요.</p>
