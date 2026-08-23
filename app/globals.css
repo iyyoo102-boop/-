@@ -350,3 +350,17 @@ body {
   color: #aaa;
   margin-top: 6px;
 }
+
+.news-summary-section {
+  margin-bottom: 32px;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 8px 16px;
+}
+
+.section-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #444;
+  margin: 8px 0;
+}

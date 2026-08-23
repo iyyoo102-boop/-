@@ -16,6 +16,14 @@ type Post = {
   commentCount: number;
 };
 
+type NewsSummary = {
+  title: string;
+  url: string;
+  source: string;
+  publishedAt: string;
+  summary: string;
+};
+
 const CATEGORIES: Category[] = ["관계", "업무", "멘탈"];
 
 export default function Home() {
@@ -29,6 +37,30 @@ export default function Home() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [newsSummaries, setNewsSummaries] = useState<NewsSummary[]>([]);
+  const [isNewsLoading, setIsNewsLoading] = useState(true);
+  const [newsError, setNewsError] = useState("");
+
+  useEffect(() => {
+    async function loadNewsSummary() {
+      try {
+        const res = await fetch("/api/news/summary");
+        const data = await res.json();
+
+        if (!res.ok) {
+          setNewsError(data.error || "뉴스 요약을 불러오지 못했습니다.");
+        } else {
+          setNewsSummaries(data.articles ?? []);
+        }
+      } catch {
+        setNewsError("뉴스 요약을 불러오지 못했습니다.");
+      } finally {
+        setIsNewsLoading(false);
+      }
+    }
+
+    loadNewsSummary();
+  }, []);
 
   useEffect(() => {
     async function loadPosts() {
@@ -104,6 +136,33 @@ export default function Home() {
         <h1>테스트</h1>
         <p>문의사항을 자유롭게 남겨주세요. 작성자는 모두 익명으로 표시됩니다.</p>
       </header>
+
+      <section className="news-summary-section">
+        <h2 className="section-title">오늘의 주요 뉴스 요약</h2>
+        {isNewsLoading && <div className="empty">요약 불러오는 중...</div>}
+        {!isNewsLoading && newsError && (
+          <div className="empty">{newsError}</div>
+        )}
+        {!isNewsLoading && !newsError && (
+          <div className="news-list">
+            {newsSummaries.map((article, index) => (
+              <a
+                className="news-item"
+                key={`${article.url}-${index}`}
+                href={article.url}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <p className="news-title">{article.title}</p>
+                <p className="news-desc">{article.summary}</p>
+                <div className="news-meta">
+                  {article.source} · {article.publishedAt?.slice(0, 10)}
+                </div>
+              </a>
+            ))}
+          </div>
+        )}
+      </section>
 
       <div className="filters">
         <button
