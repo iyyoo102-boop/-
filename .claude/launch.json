@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "ellen-board",
+      "runtimeExecutable": "C:\\Users\\yiy10\\실습2차시\\dev-server.cmd",
+      "runtimeArgs": [],
+      "port": 3000,
+      "autoPort": true
+    }
+  ]
+}
