@@ -3,6 +3,9 @@
  * 시트 1행(제목줄): 신청일시 | 이름 | 휴대폰 | 성별 | 나이대 | 현재직업 | 강의신청목적 | 개인정보동의 | 유입경로 | 연락상태 | 메모
  */
 
+// 신청자가 쌓일 구글 시트: 무료 강연 신청자 명단 (AI시대 커리어 전환)
+var SHEET_ID = '1HSs7HE9zIBR-S8G0aw9aAxIGAQ9H-a7EmIxjaHUcJN0';
+
 var HEADERS = ['신청일시', '이름', '휴대폰', '성별', '나이대', '현재직업', '강의신청목적', '개인정보동의', '유입경로', '연락상태', '메모'];
 
 function doGet() {
@@ -20,7 +23,7 @@ function saveLead(row) {
   var lock = LockService.getScriptLock();
   lock.waitLock(10000);
   try {
-    var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheets()[0];
+    var sheet = SpreadsheetApp.openById(SHEET_ID).getSheets()[0];
     if (sheet.getLastRow() === 0) sheet.appendRow(HEADERS);
     sheet.appendRow([
       Utilities.formatDate(new Date(), 'Asia/Seoul', 'yyyy-MM-dd HH:mm:ss'),
