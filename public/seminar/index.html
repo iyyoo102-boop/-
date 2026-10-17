@@ -93,6 +93,9 @@
   .timeline li{display:flex;justify-content:space-between;gap:10px;font-size:14px;padding:3px 0}
   .timeline li span:last-child{color:var(--sub);white-space:nowrap}
 
+  .info b{color:#fff}
+  .map-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+  .map-btns .ghost{margin-top:0;font-size:15px}
   .final{padding:44px 0 30px;text-align:center}
   .final h2{margin-bottom:8px}
   .final p{color:var(--sub);margin-bottom:20px}
@@ -253,6 +256,22 @@
         </ul></div></div>
       <div class="row"><div class="k">참가비</div><div class="v">무료</div></div>
       <div class="row"><div class="k">모집</div><div class="v">선착순 모집<small>신청 순서대로 담당자가 순차적으로 연락드립니다</small></div></div>
+    </div>
+  </section>
+
+  <!-- 찾아오는 길 -->
+  <section class="block wrap">
+    <p class="kicker">DIRECTIONS</p>
+    <h2>찾아오는 길</h2>
+    <div class="info">
+      <div class="row"><div class="k">주소</div><div class="v">서울 송파구 법원로11길 12<br>BS한양타워 4층 통합 교육장<small>문정동 법조단지 안 · 신한라이프 대한본부</small></div></div>
+      <div class="row"><div class="k">지하철</div><div class="v">8호선 <b>문정역</b> 하차<small>법조단지 방향으로 도보 약 5~10분</small></div></div>
+      <div class="row"><div class="k">버스</div><div class="v">송파대로 중앙버스정류장<br><b>문정법조단지·건영아파트</b> 하차<small>법조단지 방향으로 도보 이동 · 타는 곳별 노선은 아래 네이버 지도 길찾기에서 확인하세요</small></div></div>
+      <div class="row"><div class="k">자가용</div><div class="v">주차 가능 여부는 담당자에게 문의해 주세요<small>신청 후 연락드릴 때 함께 안내해 드려요</small></div></div>
+    </div>
+    <div class="map-btns">
+      <a class="ghost" href="https://map.naver.com/p/search/%EC%84%9C%EC%9A%B8%20%EC%86%A1%ED%8C%8C%EA%B5%AC%20%EB%B2%95%EC%9B%90%EB%A1%9C11%EA%B8%B8%2012" target="_blank" rel="noopener">네이버 지도로 길찾기</a>
+      <button class="ghost" type="button" id="copy-addr">주소 복사하기</button>
     </div>
   </section>
 
@@ -441,6 +460,14 @@
       setErr('f-purpose');
       answers.purpose = v;
       show(cur + 1);
+    });
+
+    var copyBtn = document.getElementById('copy-addr');
+    copyBtn.addEventListener('click', function(){
+      var addr = '서울 송파구 법원로11길 12 BS한양타워 4층';
+      var done = function(){ copyBtn.textContent = '주소를 복사했어요'; };
+      if (navigator.clipboard) navigator.clipboard.writeText(addr).then(done, function(){ prompt('주소를 길게 눌러 복사하세요', addr); });
+      else prompt('주소를 길게 눌러 복사하세요', addr);
     });
 
     var phone = document.getElementById('phone');

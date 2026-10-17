@@ -10,6 +10,15 @@ function cell(v: unknown): string {
   return '"' + s.replace(/"/g, '""').replace(/\r?\n/g, " ") + '"';
 }
 
+// 링크 끝 ?src= 값을 사람이 읽는 유입경로로 바꾼다
+function channel(src: string | null): string {
+  const v = (src ?? "").toLowerCase();
+  if (["meta", "facebook", "instagram", "fb", "ig"].includes(v)) return "광고(메타)";
+  if (["mobile", "invite", "kakao", "sms"].includes(v)) return "모바일 초청장";
+  if (!v || v === "직접유입") return "직접 방문";
+  return src!;
+}
+
 function kst(iso: string): string {
   // 시트가 숫자로 바꾸지 않도록 "2026년 10월 17일 10:07" 형태의 글자로 보낸다
   const d = new Date(new Date(iso).getTime() + 9 * 3600 * 1000);
@@ -36,7 +45,7 @@ Deno.serve(async (req) => {
 
   const lines = [HEADERS.map(cell).join(",")];
   for (const r of data) {
-    lines.push([kst(r.created_at), r.name, r.phone, r.gender, r.age, r.job, r.purpose, r.agree, r.source].map(cell).join(","));
+    lines.push([kst(r.created_at), r.name, r.phone, r.gender, r.age, r.job, r.purpose, r.agree, channel(r.source)].map(cell).join(","));
   }
   return new Response(lines.join("\n"), {
     headers: { "Content-Type": "text/csv; charset=utf-8", "Cache-Control": "no-store" },
