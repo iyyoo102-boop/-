@@ -20,10 +20,11 @@ function channel(src: string | null): string {
 }
 
 function kst(iso: string): string {
-  // 시트가 숫자로 바꾸지 않도록 "2026년 10월 17일 10:07" 형태의 글자로 보낸다
+  // 시트가 날짜 숫자로 바꾸지 않도록 요일을 붙인 "10/17(금) 11:52" 형태의 글자로 보낸다
   const d = new Date(new Date(iso).getTime() + 9 * 3600 * 1000);
   const p = (n: number) => String(n).padStart(2, "0");
-  return `${d.getUTCFullYear()}년 ${d.getUTCMonth() + 1}월 ${d.getUTCDate()}일 ${p(d.getUTCHours())}:${p(d.getUTCMinutes())}`;
+  const day = "일월화수목금토"[d.getUTCDay()];
+  return `${p(d.getUTCMonth() + 1)}/${p(d.getUTCDate())}(${day}) ${p(d.getUTCHours())}:${p(d.getUTCMinutes())}`;
 }
 
 Deno.serve(async (req) => {
