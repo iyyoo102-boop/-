@@ -377,8 +377,9 @@
 
 <script>
   var CONFIG = {
-    // 구글 Apps Script 웹 앱 주소(/exec)를 넣으면 신청이 구글 시트에 저장됩니다.
-    sheetEndpoint: ''
+    // 신청 내용을 저장하는 곳 (Supabase). 저장된 내용은 구글 시트로 자동으로 불러와집니다.
+    supabaseUrl: '',
+    supabaseKey: ''
   };
 
   (function(){
@@ -485,19 +486,19 @@
     });
 
     function save(row){
-      if (window.google && google.script && google.script.run) {
-        return new Promise(function(res, rej){
-          google.script.run.withSuccessHandler(function(){ res('sheet'); }).withFailureHandler(rej).saveLead(row);
-        });
-      }
-      if (CONFIG.sheetEndpoint) {
-        return fetch(CONFIG.sheetEndpoint, {
-          method: 'POST', mode: 'no-cors',
-          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify(row)
-        }).then(function(){ return 'sheet'; });
-      }
-      return Promise.resolve('preview');
+      if (!CONFIG.supabaseUrl) return Promise.resolve('preview');
+      return fetch(CONFIG.supabaseUrl + '/rest/v1/seminar_applications', {
+        method: 'POST',
+        headers: {
+          'apikey': CONFIG.supabaseKey,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify(row)
+      }).then(function(r){
+        if (!r.ok) throw new Error('save failed ' + r.status);
+        return 'sheet';
+      });
     }
   })();
 </script>
