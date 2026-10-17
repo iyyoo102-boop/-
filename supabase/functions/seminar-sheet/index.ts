@@ -16,12 +16,15 @@ function kst(iso: string): string {
 }
 
 Deno.serve(async (req) => {
+  const db = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
+
+  // 비밀 키는 seminar_sheet_key 테이블에 저장 (외부에서는 읽을 수 없음)
   const key = new URL(req.url).searchParams.get("key");
-  if (!key || key !== Deno.env.get("SEMINAR_SHEET_KEY")) {
+  const { data: saved } = await db.from("seminar_sheet_key").select("key").eq("id", 1).single();
+  if (!key || !saved || key !== saved.key) {
     return new Response("forbidden", { status: 403 });
   }
 
-  const db = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
   const { data, error } = await db
     .from("seminar_applications")
     .select("created_at,name,phone,gender,age,job,purpose,agree,source")
