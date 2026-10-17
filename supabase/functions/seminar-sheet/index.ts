@@ -30,6 +30,7 @@ Deno.serve(async (req) => {
   const { data, error } = await db
     .from("seminar_applications")
     .select("created_at,name,phone,gender,age,job,purpose,agree,source")
+    .or("source.is.null,source.neq.test") // 연동 시험용 신청은 시트에 보내지 않는다
     .order("id", { ascending: true });
   if (error) return new Response("error", { status: 500 });
 
